@@ -25,6 +25,37 @@ Or update `*.csproj` to include a dependency on
 ```
 
 ## Usage
+You can configure your application in order to specify Amp's behavior.
+* Path - (`"/warmup"`) The path which invokes the asynchronous initialization
+* Parallelism - (`WarmUpParallelism.Parallel`) Execution flow for each individual `IWarmUp`.
+
+```csharp
+public void ConfigureServices(IServiceCollection services) => 
+  services.AddWarmUp(builder => {
+    builder.Path = "/my-custom-path";
+    builder.Parallelism = WarmUpParallelism.Sequential;
+  });
+```
+
+You can warm up your application in one of two ways: asynchronous or synchronous.
+
+### Asynchronous
+Use asynchronous warm up when you want to initialize the system separately from application boot up.
+```csharp
+public void Configure(IApplicationBuilder app, IHostingEnvironment env) =>
+  app.UseWarmUp().UseMvc();  
+```
+
+### Synchronous
+Use synchronous warm up when you need to initialize the system before the application begins to take requests.
+```csharp
+public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+  app.WarmUpAsync().GetAwaiter().GetResult();
+  app.UseMvc();
+}
+```
+
+### Code Samples
 Sample integration with Entity Framework Core:
 ```csharp
 class Startup {
