@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,13 +10,13 @@ namespace Amp
     class WarmUpService : IWarmUpService
     {
         readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
-        readonly IWarmUp[] _warmUps;
+        readonly IServiceProvider _services;
         Func<Task> _fn;
         bool _warm;
 
-        public WarmUpService(IEnumerable<IWarmUp> warmUps, IOptions<WarmUpOptions> options)
+        public WarmUpService(IServiceProvider services, IOptions<WarmUpOptions> options)
         {
-            _warmUps = warmUps.ToArray();
+            _services = services;
 
             switch (options.Value.Parallelism)
             {
@@ -30,7 +30,7 @@ namespace Amp
                     throw new ArgumentOutOfRangeException(nameof(options), options.Value.Parallelism, "Invalid Parallelism Value");
             }
         }
-        
+
         static Task WarmAsync() => Task.CompletedTask;
 
         Func<Task> LockAndSwitch(Func<Task> fn)
@@ -54,14 +54,24 @@ namespace Amp
             };
         }
 
-        Task ColdParallelAsync()
-            => Task.WhenAll(_warmUps.Select(x => x.InvokeAsync()));
+        async Task ColdParallelAsync()
+        {
+            using (var scope = _services.CreateScope())
+            {
+                var warmUps = scope.ServiceProvider.GetServices<IWarmUp>();
+                await Task.WhenAll(warmUps.Select(x => x.InvokeAsync()));
+            }
+        }
 
         async Task ColdSequentialAsync()
         {
-            foreach (var warmUp in _warmUps)
+            using (var scope = _services.CreateScope())
             {
-                await warmUp.InvokeAsync();
+                var warmUps = scope.ServiceProvider.GetServices<IWarmUp>();
+                foreach (var warmUp in warmUps)
+                {
+                    await warmUp.InvokeAsync();
+                }
             }
         }
 

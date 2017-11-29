@@ -31,7 +31,10 @@ class Startup {
   ...
   
   public void ConfigureServices(IServiceCollection services) => 
-    services.AddWarmUp().AddScoped<IWarmUp, ApplicationDbContextWarmUp>()
+    services.AddWarmUp().AddScoped<IWarmUp, ApplicationDbContextWarmUp>();
+    
+  public void Configure(IApplicationBuilder app, IHostingEnvironment env) =>
+    app.UseWarmUp().UseMvc();
 }
 
 class ApplicationDbContextWarmUp : IWarmUp {
