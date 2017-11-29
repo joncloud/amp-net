@@ -40,7 +40,7 @@ namespace Amp.Tests
 
                 Assert.Equal(10, dates.Length);
 
-                var threshold = TimeSpan.FromMilliseconds(10);
+                var threshold = TimeSpan.FromMilliseconds(100);
                 var times = dates.Select(date => date - now);
                 foreach (var time in times)
                 {
