@@ -22,7 +22,7 @@
     <PackageId>Amp</PackageId>
     <PackageTags>asp.net core;mvc;warm up;start up;initialize;async</PackageTags>
     <PackageReleaseNotes>https://github.com/joncloud/amp-net/releases</PackageReleaseNotes>
-    <!--<PackageIconUrl>https://raw.githubusercontent.com/joncloud/amp-net/master/nuget.png</PackageIconUrl>-->
+    <PackageIconUrl>https://raw.githubusercontent.com/joncloud/amp-net/master/nuget.svg</PackageIconUrl>
     <PackageProjectUrl>https://github.com/joncloud/amp-net</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/joncloud/amp-net/master/LICENSE.md</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
