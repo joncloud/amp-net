@@ -2,6 +2,8 @@
 [![Travis](https://img.shields.io/travis/joncloud/amp-net.svg)](https://travis-ci.org/joncloud/amp-net/)
 [![NuGet](https://img.shields.io/nuget/v/Amp.svg)](https://www.nuget.org/packages/Amp/)
 
+<img src="https://raw.githubusercontent.com/joncloud/amp-net/master/nuget.png" alt="amp.net" />
+
 ## Description
 Amp.NET provides warm up routines to ASP.NET Core applications.
 
