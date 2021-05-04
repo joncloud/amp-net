@@ -4,6 +4,28 @@
 
 <img src="https://raw.githubusercontent.com/joncloud/amp-net/master/logo.png" alt="amp.net" />
 
+## Deprecation
+This project is no longer maintained and has been made obsolete by improvements to the ASP.NET Core platform. Consider building your warm up routines in your main entry point, i.e., `Program.cs`. For example:
+
+```csharp
+class Program {
+  static void WarmUp(ApplicationDbContext context) {
+    context.Users.FirstOrDefault();
+  }
+
+  static void Main(string[] args) {
+    var host = CreateHostBuilder(args).Build();
+
+    WarmUp(
+      host.Services
+        .GetRequiredService<ApplicationDbContext>()
+    );
+
+    host.Run();
+  }
+}
+```
+
 ## Description
 Amp.NET provides warm up routines to ASP.NET Core applications.
 
